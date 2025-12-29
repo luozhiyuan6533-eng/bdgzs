@@ -1,0 +1,1515 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BD工作室 - 游戏教程论坛</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3a0ca3;
+            --dark: #1a1a2e;
+            --light: #f8f9fa;
+            --gray: #6c757d;
+            --success: #4cc9f0;
+            --warning: #f72585;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fb;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* 头部样式 */
+        header {
+            background: linear-gradient(135deg, var(--dark) 0%, var(--secondary) 100%);
+            padding: 15px 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .logo-icon {
+            background: var(--primary);
+            width: 45px;
+            height: 45px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            color: white;
+        }
+        
+        .logo-text h1 {
+            color: white;
+            font-size: 24px;
+            font-weight: 700;
+        }
+        
+        .logo-text p {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 13px;
+        }
+        
+        /* 导航菜单 */
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+        }
+        
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 16px;
+            padding: 8px 15px;
+            border-radius: 6px;
+            transition: all 0.3s;
+        }
+        
+        nav a:hover, nav a.active {
+            background: rgba(255, 255, 255, 0.15);
+        }
+        
+        .mobile-menu-btn {
+            display: none;
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        
+        /* 主要内容区域 */
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 30px;
+            margin: 30px 0;
+        }
+        
+        /* 侧边栏 */
+        .sidebar {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            height: fit-content;
+            position: sticky;
+            top: 90px;
+        }
+        
+        .sidebar-title {
+            font-size: 18px;
+            color: var(--dark);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .sidebar-list {
+            list-style: none;
+        }
+        
+        .sidebar-list li {
+            margin-bottom: 15px;
+        }
+        
+        .sidebar-list a {
+            color: #555;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+        
+        .sidebar-list a:hover {
+            background: #f0f5ff;
+            color: var(--primary);
+        }
+        
+        /* 教程卡片 */
+        .tutorial-card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+            border-left: 4px solid var(--primary);
+        }
+        
+        .tutorial-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .tutorial-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+        
+        .tutorial-title {
+            font-size: 22px;
+            color: var(--dark);
+            margin-bottom: 8px;
+        }
+        
+        .tutorial-meta {
+            display: flex;
+            gap: 15px;
+            color: var(--gray);
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+        
+        .tutorial-meta span {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .tutorial-content {
+            color: #555;
+            margin-bottom: 20px;
+            line-height: 1.7;
+        }
+        
+        .tutorial-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .tag {
+            background: #f0f5ff;
+            color: var(--primary);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+        }
+        
+        .read-more {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: background 0.3s;
+        }
+        
+        .read-more:hover {
+            background: var(--secondary);
+        }
+        
+        /* 分页 */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 40px;
+        }
+        
+        .page-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            color: #555;
+            text-decoration: none;
+            font-weight: 500;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s;
+        }
+        
+        .page-btn.active, .page-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+        
+        /* 管理后台样式 */
+        .admin-panel {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.08);
+            margin: 30px 0;
+        }
+        
+        .admin-title {
+            font-size: 28px;
+            color: var(--dark);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #444;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border 0.3s;
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
+        
+        textarea.form-control {
+            min-height: 150px;
+            resize: vertical;
+        }
+        
+        .btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+        }
+        
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+        
+        .btn-danger {
+            background: #dc3545;
+        }
+        
+        .btn-danger:hover {
+            background: #c82333;
+        }
+        
+        .btn-success {
+            background: #28a745;
+        }
+        
+        .btn-success:hover {
+            background: #218838;
+        }
+        
+        /* 教程列表管理 */
+        .tutorial-list-item {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 4px solid var(--primary);
+        }
+        
+        .tutorial-list-info h3 {
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+        
+        .tutorial-list-meta {
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .tutorial-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        /* 页脚 */
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 40px 0 20px;
+            margin-top: 60px;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 30px;
+        }
+        
+        .footer-column h3 {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: var(--success);
+        }
+        
+        .footer-column ul {
+            list-style: none;
+        }
+        
+        .footer-column li {
+            margin-bottom: 12px;
+        }
+        
+        .footer-column a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-column a:hover {
+            color: white;
+        }
+        
+        .copyright {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 14px;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 992px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                order: 2;
+                position: static;
+            }
+            
+            .footer-content {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            
+            nav ul {
+                flex-direction: column;
+                gap: 10px;
+                width: 100%;
+                display: none;
+            }
+            
+            nav ul.show {
+                display: flex;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+                position: absolute;
+                right: 20px;
+                top: 20px;
+            }
+            
+            .tutorial-header {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* 隐藏/显示类 */
+        .hidden {
+            display: none !important;
+        }
+        
+        /* 公告样式 */
+        .announcement {
+            background: linear-gradient(135deg, #4cc9f0 0%, #4361ee 100%);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .announcement i {
+            font-size: 24px;
+        }
+        
+        /* 登录面板 */
+        .login-panel {
+            max-width: 500px;
+            margin: 50px auto;
+        }
+        
+        .login-title {
+            text-align: center;
+            margin-bottom: 30px;
+            color: var(--dark);
+        }
+        
+        /* 加载动画 */
+        .loader {
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid var(--primary);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 50px auto;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- 头部 -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-gamepad"></i>
+                    </div>
+                    <div class="logo-text">
+                        <h1>BD工作室</h1>
+                        <p>游戏教程与问题解决论坛</p>
+                    </div>
+                </div>
+                
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <i class="fas fa-bars"></i>
+                </button>
+                
+                <nav>
+                    <ul id="mainNav">
+                        <li><a href="#" class="nav-link active" data-page="home">首页</a></li>
+                        <li><a href="#" class="nav-link" data-page="tutorials">教程中心</a></li>
+                        <li><a href="#" class="nav-link" data-page="forum">问题论坛</a></li>
+                        <li><a href="#" class="nav-link" data-page="admin">管理后台</a></li>
+                        <li><a href="#" class="nav-link" data-page="login" id="loginLogoutLink">登录</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+    
+    <!-- 主要内容区域 -->
+    <div class="container">
+        <!-- 首页内容 -->
+        <div id="homePage" class="page-content">
+            <div class="announcement">
+                <i class="fas fa-bullhorn"></i>
+                <div>
+                    <strong>最新公告：</strong> 网站已升级，新增教程管理功能！您现在可以在管理后台发布新教程，所有用户都能实时看到更新。
+                </div>
+            </div>
+            
+            <div class="main-content">
+                <div class="content-area">
+                    <h2 style="margin-bottom: 25px; color: var(--dark);">最新教程</h2>
+                    
+                    <div id="featuredTutorials">
+                        <!-- 动态加载的特色教程 -->
+                    </div>
+                    
+                    <div id="loadingTutorials" class="loader"></div>
+                    
+                    <h2 style="margin-bottom: 25px; margin-top: 40px; color: var(--dark);">常见问题</h2>
+                    
+                    <div class="tutorial-card">
+                        <div class="tutorial-header">
+                            <div>
+                                <h3 class="tutorial-title">如何正确开启加速器玩游戏？</h3>
+                                <div class="tutorial-meta">
+                                    <span><i class="far fa-calendar"></i> 2023-10-15</span>
+                                    <span><i class="far fa-eye"></i> 2456 次浏览</span>
+                                    <span><i class="far fa-user"></i> BD工作室</span>
+                                </div>
+                            </div>
+                            <span class="tag">热门</span>
+                        </div>
+                        
+                        <div class="tutorial-content">
+                            <p>先打开【UU】或者【迅游】加速器，再选择【无畏契约国服】进行加速，然后记得选择一条【路由模式】的节点，开启之后就可以登陆wegame然后启动游戏，能避免80％的异地冻结！</p>
+                            <p style="margin-top: 10px;"><strong>温馨提示：</strong> 网吧玩家推荐【UU加速器】（网吧用户免费），家里玩家推荐【迅游加速器】（新用户有免费时长）</p>
+                        </div>
+                        
+                        <div class="tutorial-tags">
+                            <span class="tag">加速器</span>
+                            <span class="tag">无畏契约</span>
+                            <span class="tag">冻结问题</span>
+                        </div>
+                        
+                        <a href="#" class="read-more" data-page="tutorials">查看完整教程</a>
+                    </div>
+                    
+                    <div class="tutorial-card">
+                        <div class="tutorial-header">
+                            <div>
+                                <h3 class="tutorial-title">wegame出现QQ验证或者短信验证怎么办？</h3>
+                                <div class="tutorial-meta">
+                                    <span><i class="far fa-calendar"></i> 2023-10-10</span>
+                                    <span><i class="far fa-eye"></i> 1872 次浏览</span>
+                                    <span><i class="far fa-user"></i> BD工作室</span>
+                                </div>
+                            </div>
+                            <span class="tag" style="background: #ffebee; color: #d32f2f;">紧急</span>
+                        </div>
+                        
+                        <div class="tutorial-content">
+                            <p>直接百度搜索wegame下载安装即可，原来的wegame不用管他，直接覆盖安装。注意：直接覆盖安装即可，不需要卸载原有版本。</p>
+                        </div>
+                        
+                        <div class="tutorial-tags">
+                            <span class="tag">wegame</span>
+                            <span class="tag">验证问题</span>
+                            <span class="tag">登录问题</span>
+                        </div>
+                        
+                        <a href="#" class="read-more" data-page="tutorials">查看完整教程</a>
+                    </div>
+                </div>
+                
+                <div class="sidebar">
+                    <h3 class="sidebar-title"><i class="fas fa-fire"></i> 热门教程</h3>
+                    <ul class="sidebar-list" id="popularTutorials">
+                        <!-- 动态加载热门教程 -->
+                    </ul>
+                    
+                    <h3 class="sidebar-title" style="margin-top: 30px;"><i class="fas fa-tags"></i> 教程分类</h3>
+                    <ul class="sidebar-list">
+                        <li><a href="#"><i class="fas fa-bolt"></i> 加速器使用</a></li>
+                        <li><a href="#"><i class="fas fa-sign-in-alt"></i> 登录问题</a></li>
+                        <li><a href="#"><i class="fas fa-tachometer-alt"></i> 性能优化</a></li>
+                        <li><a href="#"><i class="fas fa-exclamation-triangle"></i> 错误解决</a></li>
+                        <li><a href="#"><i class="fas fa-gamepad"></i> 游戏技巧</a></li>
+                    </ul>
+                    
+                    <h3 class="sidebar-title" style="margin-top: 30px;"><i class="fas fa-info-circle"></i> 关于我们</h3>
+                    <p style="color: #666; font-size: 14px; line-height: 1.6;">BD工作室专注于提供游戏问题解决方案和教程。我们的目标是帮助玩家获得更好的游戏体验，解决各种游戏相关问题。</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 教程中心 -->
+        <div id="tutorialsPage" class="page-content hidden">
+            <div class="main-content">
+                <div class="content-area">
+                    <h2 style="margin-bottom: 25px; color: var(--dark);">所有教程</h2>
+                    <p style="margin-bottom: 25px; color: #666;">在这里可以找到所有游戏相关教程和问题解决方案。</p>
+                    
+                    <div id="allTutorials">
+                        <!-- 动态加载所有教程 -->
+                    </div>
+                    
+                    <div class="pagination">
+                        <a href="#" class="page-btn active">1</a>
+                        <a href="#" class="page-btn">2</a>
+                        <a href="#" class="page-btn">3</a>
+                        <a href="#" class="page-btn">下一页</a>
+                    </div>
+                </div>
+                
+                <div class="sidebar">
+                    <h3 class="sidebar-title"><i class="fas fa-search"></i> 搜索教程</h3>
+                    <div style="margin-bottom: 25px;">
+                        <input type="text" id="searchTutorial" class="form-control" placeholder="输入关键词搜索...">
+                        <button class="btn" style="width: 100%; margin-top: 10px;"><i class="fas fa-search"></i> 搜索</button>
+                    </div>
+                    
+                    <h3 class="sidebar-title"><i class="fas fa-filter"></i> 按标签筛选</h3>
+                    <div class="tutorial-tags" style="margin-bottom: 20px;">
+                        <span class="tag">加速器</span>
+                        <span class="tag">wegame</span>
+                        <span class="tag">登录问题</span>
+                        <span class="tag">冻结</span>
+                        <span class="tag">验证</span>
+                        <span class="tag">网络</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 问题论坛 -->
+        <div id="forumPage" class="page-content hidden">
+            <div class="main-content">
+                <div class="content-area">
+                    <h2 style="margin-bottom: 25px; color: var(--dark);">问题论坛</h2>
+                    <p style="margin-bottom: 25px; color: #666;">在这里可以提问和讨论游戏相关问题。我们的社区会尽力帮助您解决问题。</p>
+                    
+                    <div class="tutorial-card">
+                        <div class="tutorial-header">
+                            <div>
+                                <h3 class="tutorial-title">无畏契约启动后闪退怎么办？</h3>
+                                <div class="tutorial-meta">
+                                    <span><i class="far fa-calendar"></i> 2023-10-20</span>
+                                    <span><i class="far fa-comment"></i> 8 个回复</span>
+                                    <span><i class="far fa-user"></i> 玩家小明</span>
+                                </div>
+                            </div>
+                            <span class="tag" style="background: #fff3cd; color: #856404;">未解决</span>
+                        </div>
+                        
+                        <div class="tutorial-content">
+                            <p>游戏启动后到加载界面就闪退，重新安装过游戏也没用。电脑配置是i5-10400F + GTX 1660S，系统是Win10最新版。</p>
+                        </div>
+                        
+                        <div class="tutorial-tags">
+                            <span class="tag">无畏契约</span>
+                            <span class="tag">闪退</span>
+                            <span class="tag">启动问题</span>
+                        </div>
+                        
+                        <a href="#" class="read-more">查看讨论</a>
+                    </div>
+                    
+                    <div class="tutorial-card">
+                        <div class="tutorial-header">
+                            <div>
+                                <h3 class="tutorial-title">使用UU加速器后延迟反而更高了</h3>
+                                <div class="tutorial-meta">
+                                    <span><i class="far fa-calendar"></i> 2023-10-18</span>
+                                    <span><i class="far fa-comment"></i> 12 个回复</span>
+                                    <span><i class="far fa-user"></i> 玩家小李</span>
+                                </div>
+                            </div>
+                            <span class="tag" style="background: #d4edda; color: #155724;">已解决</span>
+                        </div>
+                        
+                        <div class="tutorial-content">
+                            <p>按照教程使用了UU加速器的路由模式，但是游戏延迟从40ms变成了80ms，请问这是什么原因？</p>
+                        </div>
+                        
+                        <div class="tutorial-tags">
+                            <span class="tag">加速器</span>
+                            <span class="tag">延迟</span>
+                            <span class="tag">UU</span>
+                        </div>
+                        
+                        <a href="#" class="read-more">查看解决方案</a>
+                    </div>
+                    
+                    <div class="tutorial-card">
+                        <div class="tutorial-header">
+                            <div>
+                                <h3 class="tutorial-title">wegame无法自动登录，每次都要手动输入密码</h3>
+                                <div class="tutorial-meta">
+                                    <span><i class="far fa-calendar"></i> 2023-10-15</span>
+                                    <span><i class="far fa-comment"></i> 5 个回复</span>
+                                    <span><i class="far fa-user"></i> 玩家小王</span>
+                                </div>
+                            </div>
+                            <span class="tag" style="background: #d4edda; color: #155724;">已解决</span>
+                        </div>
+                        
+                        <div class="tutorial-content">
+                            <p>已经勾选了"记住密码"和"自动登录"，但是每次启动wegame还是需要手动输入密码，请问如何解决？</p>
+                        </div>
+                        
+                        <div class="tutorial-tags">
+                            <span class="tag">wegame</span>
+                            <span class="tag">自动登录</span>
+                            <span class="tag">密码</span>
+                        </div>
+                        
+                        <a href="#" class="read-more">查看解决方案</a>
+                    </div>
+                    
+                    <div style="margin-top: 30px; text-align: center;">
+                        <button class="btn"><i class="fas fa-plus"></i> 发布新问题</button>
+                    </div>
+                </div>
+                
+                <div class="sidebar">
+                    <h3 class="sidebar-title"><i class="fas fa-question-circle"></i> 提问前请阅读</h3>
+                    <div style="color: #666; font-size: 14px; line-height: 1.6;">
+                        <p>1. 提问前请先搜索是否已有类似问题</p>
+                        <p>2. 请详细描述您的问题和操作步骤</p>
+                        <p>3. 提供相关的错误截图或代码</p>
+                        <p>4. 说明您的游戏版本和系统环境</p>
+                        <p>5. 保持礼貌，尊重其他用户</p>
+                    </div>
+                    
+                    <h3 class="sidebar-title" style="margin-top: 30px;"><i class="fas fa-chart-line"></i> 论坛统计</h3>
+                    <div style="color: #666; font-size: 14px;">
+                        <p>总问题数: 156</p>
+                        <p>已解决问题: 128</p>
+                        <p>今日新问题: 5</p>
+                        <p>社区成员: 892</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 管理后台 -->
+        <div id="adminPage" class="page-content hidden">
+            <div class="admin-panel">
+                <h2 class="admin-title">教程管理后台</h2>
+                <p style="text-align: center; margin-bottom: 30px; color: #666;">在这里您可以添加、编辑或删除教程内容</p>
+                
+                <div id="adminLogin" class="login-panel">
+                    <h3 class="login-title">管理员登录</h3>
+                    <div class="form-group">
+                        <label for="adminUsername">用户名</label>
+                        <input type="text" id="adminUsername" class="form-control" placeholder="输入管理员用户名">
+                    </div>
+                    <div class="form-group">
+                        <label for="adminPassword">密码</label>
+                        <input type="password" id="adminPassword" class="form-control" placeholder="输入管理员密码">
+                    </div>
+                    <div class="form-group">
+                        <button class="btn" id="adminLoginBtn" style="width: 100%;"><i class="fas fa-sign-in-alt"></i> 登录管理后台</button>
+                    </div>
+                    <p style="text-align: center; color: #666; font-size: 14px;">提示：初始用户名: admin，密码: admin123</p>
+                </div>
+                
+                <div id="adminContent" class="hidden">
+                    <div style="display: flex; justify-content: center; gap: 15px; margin-bottom: 30px;">
+                        <button class="btn" id="addTutorialBtn"><i class="fas fa-plus"></i> 添加新教程</button>
+                        <button class="btn btn-secondary" id="manageTutorialsBtn"><i class="fas fa-list"></i> 管理现有教程</button>
+                        <button class="btn btn-danger" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> 退出登录</button>
+                    </div>
+                    
+                    <!-- 添加教程表单 -->
+                    <div id="addTutorialForm" class="hidden">
+                        <h3 style="margin-bottom: 20px; color: var(--dark);">添加新教程</h3>
+                        
+                        <div class="form-group">
+                            <label for="tutorialTitle">教程标题 *</label>
+                            <input type="text" id="tutorialTitle" class="form-control" placeholder="输入教程标题">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="tutorialContent">教程内容 *</label>
+                            <textarea id="tutorialContent" class="form-control" placeholder="输入详细的教程内容..."></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="tutorialTags">标签（用逗号分隔）</label>
+                            <input type="text" id="tutorialTags" class="form-control" placeholder="例如: 加速器, 冻结问题, 无畏契约">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="tutorialAuthor">作者</label>
+                            <input type="text" id="tutorialAuthor" class="form-control" value="BD工作室">
+                        </div>
+                        
+                        <div style="display: flex; gap: 15px; margin-top: 30px;">
+                            <button class="btn btn-success" id="saveTutorialBtn"><i class="fas fa-save"></i> 保存教程</button>
+                            <button class="btn btn-secondary" id="cancelAddBtn">取消</button>
+                        </div>
+                    </div>
+                    
+                    <!-- 管理教程列表 -->
+                    <div id="manageTutorialList" class="hidden">
+                        <h3 style="margin-bottom: 20px; color: var(--dark);">管理现有教程</h3>
+                        
+                        <div id="tutorialsListContainer">
+                            <!-- 动态加载教程列表 -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 登录页面 -->
+        <div id="loginPage" class="page-content hidden">
+            <div class="login-panel">
+                <h3 class="login-title">用户登录</h3>
+                <div class="form-group">
+                    <label for="username">用户名</label>
+                    <input type="text" id="username" class="form-control" placeholder="输入用户名">
+                </div>
+                <div class="form-group">
+                    <label for="password">密码</label>
+                    <input type="password" id="password" class="form-control" placeholder="输入密码">
+                </div>
+                <div class="form-group">
+                    <button class="btn" id="userLoginBtn" style="width: 100%;"><i class="fas fa-sign-in-alt"></i> 登录</button>
+                </div>
+                <p style="text-align: center; color: #666;">还没有账号？ <a href="#" style="color: var(--primary);">立即注册</a></p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 页脚 -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>BD工作室</h3>
+                    <ul>
+                        <li><a href="#">关于我们</a></li>
+                        <li><a href="#">联系我们</a></li>
+                        <li><a href="#">加入我们</a></li>
+                        <li><a href="#">隐私政策</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>教程分类</h3>
+                    <ul>
+                        <li><a href="#">加速器使用</a></li>
+                        <li><a href="#">登录问题</a></li>
+                        <li><a href="#">性能优化</a></li>
+                        <li><a href="#">错误解决</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>热门游戏</h3>
+                    <ul>
+                        <li><a href="#">无畏契约</a></li>
+                        <li><a href="#">英雄联盟</a></li>
+                        <li><a href="#">绝地求生</a></li>
+                        <li><a href="#">CS:GO</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>关注我们</h3>
+                    <ul>
+                        <li><a href="#"><i class="fab fa-qq"></i> QQ群: 12345678</a></li>
+                        <li><a href="#"><i class="fab fa-weixin"></i> 微信公众号</a></li>
+                        <li><a href="#"><i class="fab fa-bilibili"></i> Bilibili频道</a></li>
+                        <li><a href="#"><i class="fas fa-envelope"></i> Email: bdstudio@example.com</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                &copy; 2023 BD工作室. 本网站内容仅供参考，所有游戏名称及商标属于其各自所有者。
+            </div>
+        </div>
+    </footer>
+    
+    <!-- 脚本引入 -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    
+    <script>
+        // 初始化变量
+        let isAdminLoggedIn = false;
+        let tutorials = [];
+        
+        // 页面加载完成后执行
+        $(document).ready(function() {
+            // 初始化Toastr通知
+            toastr.options = {
+                "positionClass": "toast-top-right",
+                "progressBar": true,
+                "timeOut": "3000"
+            };
+            
+            // 加载保存的教程数据
+            loadTutorials();
+            
+            // 导航菜单点击事件
+            $('.nav-link').on('click', function(e) {
+                e.preventDefault();
+                
+                // 更新导航菜单激活状态
+                $('.nav-link').removeClass('active');
+                $(this).addClass('active');
+                
+                // 显示对应的页面
+                const page = $(this).data('page');
+                showPage(page);
+                
+                // 如果是管理页面且未登录，显示登录表单
+                if (page === 'admin' && !isAdminLoggedIn) {
+                    $('#adminLogin').removeClass('hidden');
+                    $('#adminContent').addClass('hidden');
+                }
+                
+                // 移动端菜单隐藏
+                if ($(window).width() <= 768) {
+                    $('#mainNav').removeClass('show');
+                }
+            });
+            
+            // 移动端菜单按钮
+            $('#mobileMenuBtn').on('click', function() {
+                $('#mainNav').toggleClass('show');
+            });
+            
+            // 管理后台登录
+            $('#adminLoginBtn').on('click', function() {
+                const username = $('#adminUsername').val();
+                const password = $('#adminPassword').val();
+                
+                if (username === 'admin' && password === 'admin123') {
+                    isAdminLoggedIn = true;
+                    $('#adminLogin').addClass('hidden');
+                    $('#adminContent').removeClass('hidden');
+                    $('#loginLogoutLink').html('<i class="fas fa-sign-out-alt"></i> 退出');
+                    toastr.success('管理员登录成功！');
+                    
+                    // 默认显示添加教程表单
+                    $('#addTutorialForm').removeClass('hidden');
+                    $('#manageTutorialList').addClass('hidden');
+                } else {
+                    toastr.error('用户名或密码错误！');
+                }
+            });
+            
+            // 用户登录
+            $('#userLoginBtn').on('click', function() {
+                const username = $('#username').val();
+                const password = $('#password').val();
+                
+                if (username && password) {
+                    toastr.success('登录成功！');
+                    showPage('home');
+                    $('.nav-link').removeClass('active');
+                    $('.nav-link[data-page="home"]').addClass('active');
+                    $('#loginLogoutLink').html('<i class="fas fa-sign-out-alt"></i> 退出');
+                } else {
+                    toastr.error('请输入用户名和密码！');
+                }
+            });
+            
+            // 退出登录
+            $('#logoutBtn').on('click', function() {
+                isAdminLoggedIn = false;
+                $('#adminLogin').removeClass('hidden');
+                $('#adminContent').addClass('hidden');
+                $('#loginLogoutLink').html('登录');
+                toastr.info('已退出管理员登录');
+            });
+            
+            // 添加新教程按钮
+            $('#addTutorialBtn').on('click', function() {
+                $('#addTutorialForm').removeClass('hidden');
+                $('#manageTutorialList').addClass('hidden');
+            });
+            
+            // 管理现有教程按钮
+            $('#manageTutorialsBtn').on('click', function() {
+                $('#addTutorialForm').addClass('hidden');
+                $('#manageTutorialList').removeClass('hidden');
+                loadTutorialsList();
+            });
+            
+            // 取消添加教程
+            $('#cancelAddBtn').on('click', function() {
+                $('#tutorialTitle').val('');
+                $('#tutorialContent').val('');
+                $('#tutorialTags').val('');
+            });
+            
+            // 保存教程
+            $('#saveTutorialBtn').on('click', function() {
+                const title = $('#tutorialTitle').val();
+                const content = $('#tutorialContent').val();
+                const tags = $('#tutorialTags').val();
+                const author = $('#tutorialAuthor').val() || 'BD工作室';
+                
+                if (!title || !content) {
+                    toastr.error('请填写教程标题和内容！');
+                    return;
+                }
+                
+                // 创建新教程对象
+                const newTutorial = {
+                    id: Date.now(), // 使用时间戳作为ID
+                    title: title,
+                    content: content,
+                    tags: tags ? tags.split(',').map(tag => tag.trim()) : [],
+                    author: author,
+                    date: new Date().toISOString().split('T')[0], // YYYY-MM-DD格式
+                    views: 0,
+                    featured: tutorials.length < 3 // 如果教程少于3个，自动设为特色
+                };
+                
+                // 添加到教程数组
+                tutorials.push(newTutorial);
+                
+                // 保存到本地存储
+                saveTutorials();
+                
+                // 清空表单
+                $('#tutorialTitle').val('');
+                $('#tutorialContent').val('');
+                $('#tutorialTags').val('');
+                
+                // 显示成功消息
+                toastr.success('教程添加成功！');
+                
+                // 重新加载教程列表
+                loadTutorialsList();
+                loadFeaturedTutorials();
+                
+                // 切换到管理教程列表
+                $('#addTutorialForm').addClass('hidden');
+                $('#manageTutorialList').removeClass('hidden');
+            });
+            
+            // 查看更多链接
+            $(document).on('click', '.read-more', function(e) {
+                e.preventDefault();
+                $('.nav-link').removeClass('active');
+                $('.nav-link[data-page="tutorials"]').addClass('active');
+                showPage('tutorials');
+            });
+            
+            // 初始化页面
+            showPage('home');
+        });
+        
+        // 显示指定页面
+        function showPage(page) {
+            // 隐藏所有页面
+            $('.page-content').addClass('hidden');
+            
+            // 显示目标页面
+            $(`#${page}Page`).removeClass('hidden');
+            
+            // 如果显示首页，加载特色教程
+            if (page === 'home') {
+                loadFeaturedTutorials();
+            }
+            
+            // 如果显示教程中心，加载所有教程
+            if (page === 'tutorials') {
+                loadAllTutorials();
+            }
+        }
+        
+        // 加载教程数据
+        function loadTutorials() {
+            // 尝试从本地存储加载教程
+            const savedTutorials = localStorage.getItem('bdStudioTutorials');
+            
+            if (savedTutorials) {
+                tutorials = JSON.parse(savedTutorials);
+            } else {
+                // 如果没有保存的数据，创建示例教程
+                tutorials = [
+                    {
+                        id: 1,
+                        title: "如何正确开启加速器玩游戏？",
+                        content: "先打开【UU】或者【迅游】加速器，再选择【无畏契约国服】进行加速，然后记得选择一条【路由模式】的节点，开启之后就可以登陆wegame然后启动游戏，能避免80％的异地冻结！<br><br><strong>温馨提示：</strong> 网吧玩家推荐【UU加速器】（网吧用户免费），家里玩家推荐【迅游加速器】（新用户有免费时长）",
+                        tags: ["加速器", "无畏契约", "冻结问题"],
+                        author: "BD工作室",
+                        date: "2023-10-15",
+                        views: 2456,
+                        featured: true
+                    },
+                    {
+                        id: 2,
+                        title: "wegame出现QQ验证或者短信验证怎么办？",
+                        content: "直接百度搜索wegame下载安装即可，原来的wegame不用管他，直接覆盖安装。<br><br><strong>注意：</strong> 直接覆盖安装即可，不需要卸载原有版本。",
+                        tags: ["wegame", "验证问题", "登录问题"],
+                        author: "BD工作室",
+                        date: "2023-10-10",
+                        views: 1872,
+                        featured: true
+                    },
+                    {
+                        id: 3,
+                        title: "无畏契约启动后黑屏无法进入游戏",
+                        content: "如果遇到无畏契约启动后黑屏无法进入游戏的问题，可以尝试以下解决方案：<br>1. 更新显卡驱动到最新版本<br>2. 在游戏设置中尝试切换全屏/窗口模式<br>3. 关闭其他可能冲突的软件（如录屏软件、游戏助手等）<br>4. 验证游戏文件完整性",
+                        tags: ["无畏契约", "黑屏", "启动问题"],
+                        author: "BD工作室",
+                        date: "2023-10-05",
+                        views: 1243,
+                        featured: true
+                    }
+                ];
+                
+                // 保存示例教程到本地存储
+                saveTutorials();
+            }
+        }
+        
+        // 保存教程数据到本地存储
+        function saveTutorials() {
+            localStorage.setItem('bdStudioTutorials', JSON.stringify(tutorials));
+        }
+        
+        // 加载特色教程到首页
+        function loadFeaturedTutorials() {
+            const featuredContainer = $('#featuredTutorials');
+            const loadingElement = $('#loadingTutorials');
+            const popularList = $('#popularTutorials');
+            
+            // 隐藏加载动画
+            loadingElement.hide();
+            
+            // 清空容器
+            featuredContainer.empty();
+            popularList.empty();
+            
+            // 获取特色教程（前3个）
+            const featuredTutorials = tutorials.slice(0, 3);
+            
+            // 获取热门教程（按浏览量排序，取前5个）
+            const popularTutorials = [...tutorials]
+                .sort((a, b) => b.views - a.views)
+                .slice(0, 5);
+            
+            // 渲染特色教程
+            featuredTutorials.forEach(tutorial => {
+                const tutorialCard = `
+                    <div class="tutorial-card">
+                        <div class="tutorial-header">
+                            <div>
+                                <h3 class="tutorial-title">${tutorial.title}</h3>
+                                <div class="tutorial-meta">
+                                    <span><i class="far fa-calendar"></i> ${tutorial.date}</span>
+                                    <span><i class="far fa-eye"></i> ${tutorial.views} 次浏览</span>
+                                    <span><i class="far fa-user"></i> ${tutorial.author}</span>
+                                </div>
+                            </div>
+                            <span class="tag">特色</span>
+                        </div>
+                        
+                        <div class="tutorial-content">
+                            ${tutorial.content.substring(0, 150)}...
+                        </div>
+                        
+                        <div class="tutorial-tags">
+                            ${tutorial.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                        </div>
+                        
+                        <a href="#" class="read-more" data-page="tutorials">查看完整教程</a>
+                    </div>
+                `;
+                
+                featuredContainer.append(tutorialCard);
+            });
+            
+            // 渲染热门教程侧边栏
+            popularTutorials.forEach(tutorial => {
+                const listItem = `
+                    <li>
+                        <a href="#" data-tutorial-id="${tutorial.id}" class="popular-tutorial-link">
+                            <i class="fas fa-chevron-right"></i>
+                            ${tutorial.title}
+                        </a>
+                    </li>
+                `;
+                
+                popularList.append(listItem);
+            });
+            
+            // 为热门教程链接添加点击事件
+            $('.popular-tutorial-link').on('click', function(e) {
+                e.preventDefault();
+                const tutorialId = $(this).data('tutorial-id');
+                
+                // 增加浏览量
+                const tutorialIndex = tutorials.findIndex(t => t.id === tutorialId);
+                if (tutorialIndex !== -1) {
+                    tutorials[tutorialIndex].views++;
+                    saveTutorials();
+                }
+                
+                // 切换到教程中心
+                $('.nav-link').removeClass('active');
+                $('.nav-link[data-page="tutorials"]').addClass('active');
+                showPage('tutorials');
+            });
+        }
+        
+        // 加载所有教程到教程中心
+        function loadAllTutorials() {
+            const allTutorialsContainer = $('#allTutorials');
+            
+            // 清空容器
+            allTutorialsContainer.empty();
+            
+            // 按日期排序（最新的在前）
+            const sortedTutorials = [...tutorials].sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            // 渲染所有教程
+            sortedTutorials.forEach(tutorial => {
+                const tutorialCard = `
+                    <div class="tutorial-card">
+                        <div class="tutorial-header">
+                            <div>
+                                <h3 class="tutorial-title">${tutorial.title}</h3>
+                                <div class="tutorial-meta">
+                                    <span><i class="far fa-calendar"></i> ${tutorial.date}</span>
+                                    <span><i class="far fa-eye"></i> ${tutorial.views} 次浏览</span>
+                                    <span><i class="far fa-user"></i> ${tutorial.author}</span>
+                                </div>
+                            </div>
+                            ${tutorial.featured ? '<span class="tag">特色</span>' : ''}
+                        </div>
+                        
+                        <div class="tutorial-content">
+                            ${tutorial.content.substring(0, 200)}...
+                        </div>
+                        
+                        <div class="tutorial-tags">
+                            ${tutorial.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                        </div>
+                        
+                        <a href="#" class="read-more view-tutorial-btn" data-tutorial-id="${tutorial.id}">查看完整教程</a>
+                    </div>
+                `;
+                
+                allTutorialsContainer.append(tutorialCard);
+            });
+            
+            // 为查看教程按钮添加点击事件
+            $('.view-tutorial-btn').on('click', function(e) {
+                e.preventDefault();
+                const tutorialId = $(this).data('tutorial-id');
+                
+                // 增加浏览量
+                const tutorialIndex = tutorials.findIndex(t => t.id === tutorialId);
+                if (tutorialIndex !== -1) {
+                    tutorials[tutorialIndex].views++;
+                    saveTutorials();
+                    
+                    // 显示教程详情（简化版）
+                    const tutorial = tutorials[tutorialIndex];
+                    alert(`教程详情：\n\n${tutorial.title}\n\n${tutorial.content}\n\n作者：${tutorial.author}\n发布日期：${tutorial.date}`);
+                }
+            });
+        }
+        
+        // 加载教程列表到管理后台
+        function loadTutorialsList() {
+            const listContainer = $('#tutorialsListContainer');
+            
+            // 清空容器
+            listContainer.empty();
+            
+            if (tutorials.length === 0) {
+                listContainer.html('<p style="text-align: center; color: #666;">暂无教程，请添加新教程。</p>');
+                return;
+            }
+            
+            // 按日期排序（最新的在前）
+            const sortedTutorials = [...tutorials].sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            // 渲染教程列表
+            sortedTutorials.forEach(tutorial => {
+                const listItem = `
+                    <div class="tutorial-list-item">
+                        <div class="tutorial-list-info">
+                            <h3>${tutorial.title}</h3>
+                            <div class="tutorial-list-meta">
+                                <span>${tutorial.date} | ${tutorial.author} | 浏览: ${tutorial.views}</span>
+                            </div>
+                            <div class="tutorial-tags" style="margin-top: 8px;">
+                                ${tutorial.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                            </div>
+                        </div>
+                        <div class="tutorial-actions">
+                            <button class="btn btn-secondary btn-sm edit-tutorial-btn" data-tutorial-id="${tutorial.id}">编辑</button>
+                            <button class="btn btn-danger btn-sm delete-tutorial-btn" data-tutorial-id="${tutorial.id}">删除</button>
+                        </div>
+                    </div>
+                `;
+                
+                listContainer.append(listItem);
+            });
+            
+            // 为编辑按钮添加点击事件
+            $('.edit-tutorial-btn').on('click', function() {
+                const tutorialId = $(this).data('tutorial-id');
+                const tutorialIndex = tutorials.findIndex(t => t.id === tutorialId);
+                
+                if (tutorialIndex !== -1) {
+                    const tutorial = tutorials[tutorialIndex];
+                    
+                    // 填充表单
+                    $('#tutorialTitle').val(tutorial.title);
+                    $('#tutorialContent').val(tutorial.content);
+                    $('#tutorialTags').val(tutorial.tags.join(', '));
+                    $('#tutorialAuthor').val(tutorial.author);
+                    
+                    // 切换到添加表单并更新保存按钮
+                    $('#addTutorialForm').removeClass('hidden');
+                    $('#manageTutorialList').addClass('hidden');
+                    
+                    // 更新保存按钮为更新模式
+                    $('#saveTutorialBtn').html('<i class="fas fa-save"></i> 更新教程').off('click').on('click', function() {
+                        // 更新教程
+                        tutorials[tutorialIndex].title = $('#tutorialTitle').val();
+                        tutorials[tutorialIndex].content = $('#tutorialContent').val();
+                        tutorials[tutorialIndex].tags = $('#tutorialTags').val().split(',').map(tag => tag.trim());
+                        tutorials[tutorialIndex].author = $('#tutorialAuthor').val();
+                        
+                        // 保存到本地存储
+                        saveTutorials();
+                        
+                        // 清空表单
+                        $('#tutorialTitle').val('');
+                        $('#tutorialContent').val('');
+                        $('#tutorialTags').val('');
+                        
+                        // 显示成功消息
+                        toastr.success('教程更新成功！');
+                        
+                        // 重新加载教程列表
+                        loadTutorialsList();
+                        loadFeaturedTutorials();
+                        
+                        // 切换回管理列表
+                        $('#addTutorialForm').addClass('hidden');
+                        $('#manageTutorialList').removeClass('hidden');
+                        
+                        // 恢复保存按钮为添加模式
+                        setupSaveButtonAsAdd();
+                    });
+                }
+            });
+            
+            // 为删除按钮添加点击事件
+            $('.delete-tutorial-btn').on('click', function() {
+                const tutorialId = $(this).data('tutorial-id');
+                
+                if (confirm('确定要删除这个教程吗？此操作不可撤销。')) {
+                    // 删除教程
+                    const tutorialIndex = tutorials.findIndex(t => t.id === tutorialId);
+                    if (tutorialIndex !== -1) {
+                        tutorials.splice(tutorialIndex, 1);
+                        
+                        // 保存到本地存储
+                        saveTutorials();
+                        
+                        // 重新加载教程列表
+                        loadTutorialsList();
+                        loadFeaturedTutorials();
+                        
+                        toastr.success('教程删除成功！');
+                    }
+                }
+            });
+        }
+        
+        // 设置保存按钮为添加模式
+        function setupSaveButtonAsAdd() {
+            $('#saveTutorialBtn').html('<i class="fas fa-save"></i> 保存教程').off('click').on('click', function() {
+                const title = $('#tutorialTitle').val();
+                const content = $('#tutorialContent').val();
+                const tags = $('#tutorialTags').val();
+                const author = $('#tutorialAuthor').val() || 'BD工作室';
+                
+                if (!title || !content) {
+                    toastr.error('请填写教程标题和内容！');
+                    return;
+                }
+                
+                // 创建新教程对象
+                const newTutorial = {
+                    id: Date.now(), // 使用时间戳作为ID
+                    title: title,
+                    content: content,
+                    tags: tags ? tags.split(',').map(tag => tag.trim()) : [],
+                    author: author,
+                    date: new Date().toISOString().split('T')[0], // YYYY-MM-DD格式
+                    views: 0,
+                    featured: tutorials.length < 3 // 如果教程少于3个，自动设为特色
+                };
+                
+                // 添加到教程数组
+                tutorials.push(newTutorial);
+                
+                // 保存到本地存储
+                saveTutorials();
+                
+                // 清空表单
+                $('#tutorialTitle').val('');
+                $('#tutorialContent').val('');
+                $('#tutorialTags').val('');
+                
+                // 显示成功消息
+                toastr.success('教程添加成功！');
+                
+                // 重新加载教程列表
+                loadTutorialsList();
+                loadFeaturedTutorials();
+                
+                // 切换到管理教程列表
+                $('#addTutorialForm').addClass('hidden');
+                $('#manageTutorialList').removeClass('hidden');
+            });
+        }
+    </script>
+</body>
+</html>
